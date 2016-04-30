@@ -1,10 +1,17 @@
 <html>
 	<head>
 		<title>Triangles</title>
+		<style>
+			body,html {
+			margin: 0px;
+			padding: 0px;
+		}
+		</style>
+	</head>
+	<body>
+		<canvas id="cnv"></canvas>
 		<script>
-			
-			
-			function init()
+				function init()
 			{
 				var cv = document.getElementById("cnv");
 				var ctx = cv.getContext('2d');
@@ -53,10 +60,6 @@
 			window.onload = function() {
 				init();
 			}
-			
 		</script>
-	</head>
-	<body>
-		<canvas id="cnv"></canvas>
 	</body>
 </html>
