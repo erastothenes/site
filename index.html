@@ -1,0 +1,118 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Eras' Page</title>
+	<style>
+		body,html {
+			margin: 0px;
+			padding: 0px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id = "cnv"></canvas>
+	<script>
+		var cv = document.getElementById("cnv");
+		var ctx = cv.getContext('2d');
+		
+		window.onload = function()
+		{
+			cv.width = window.innerWidth;
+			cv.height = window.innerHeight;
+			ctx.fillStyle="black";
+			ctx.fillRect(0,0,cv.width,cv.height);
+			var centerX = cv.width /2 - 45;
+			var centerY = cv.height / 2 - 90;
+			
+			
+			function drawT() {
+				ctx.beginPath();
+				ctx.moveTo(centerX,centerY);
+				ctx.lineTo(centerX-90,centerY+135);
+				ctx.lineTo(centerX+90,centerY+135);
+				ctx.lineTo(centerX,centerY);
+				ctx.strokeStyle="white";
+				ctx.stroke();
+				ctx.closePath();
+				
+				ctx.beginPath();
+				ctx.lineWidth=3;
+				ctx.moveTo(0,centerY+135);
+				ctx.lineTo(centerX-27,centerY+45);
+				ctx.stroke();
+				ctx.closePath();
+				
+				var grd=ctx.createLinearGradient(centerX-28,0,centerX,0);
+				grd.addColorStop(1,"black");
+				grd.addColorStop(0,"white");
+				ctx.fillStyle=grd;
+				ctx.fillRect(centerX-28,centerY+42,30,5);
+			}
+			
+			var particles = {};
+			var particleIndex = 0;
+			var particleNum = 1;
+			
+			function Particle(x,y,vx,vy,c,l)
+			{
+				this.x = x;
+				this.y = y;
+				this.vx = vx;
+				this.vy = vy;
+				particleIndex++;
+				particles[particleIndex] = this;
+				this.id = particleIndex;
+				this.life = 0;
+				this.max_life=l;
+				this.color = c;
+			}
+			
+			Particle.prototype.draw = function()
+			{
+				this.x += this.vx;
+				this.y += this.vy;
+				this.life++;
+				if (this.life == this.max_life)
+				{
+					delete particles[this.id];
+				}
+				ctx.fillStyle = this.color;
+				ctx.fillRect(this.x,this.y,10,10);
+			}
+			
+			function getRndColor() {
+				var r = 255*Math.random()|0,
+					g = 255*Math.random()|0,
+					b = 255*Math.random()|0;
+				return 'rgb(' + r + ',' + g + ',' + b + ')';
+			}
+			
+			setInterval(function() { 
+					for (var i = 0; i < particleNum; i++)
+					{
+						new Particle(centerX,centerY,Math.random() * 10 -5,Math.random() * -10 - 3,"white",10);
+						new Particle(centerX+20,centerY+30,5,Math.random() * -1,"red",200);
+						new Particle(centerX+24,centerY+36,5,Math.random() * -0.5,"orange",200);
+						new Particle(centerX+28,centerY+42,5,Math.random() * -0.25,"yellow",200);
+						new Particle(centerX+32,centerY+48,5,Math.random() * 0.25,"green",200);
+						new Particle(centerX+42,centerY+56,5,Math.random() * 0.75,"blue",200);
+						new Particle(centerX+46,centerY+66,5,Math.random() * 0.9,"purple",200);
+					}
+					
+					ctx.globalCompositeOperation = "source-over";
+					ctx.fillStyle="rgba(0,0,0,0.2)";
+					ctx.fillRect(0,0,cv.width,cv.height);
+					drawT();
+					ctx.globalCompositeOperation = "lighter";
+					for (var i in particles)
+					{
+						particles[i].draw();
+					}
+				},30);
+			
+			
+				
+		}
+	</script>
+</body>
+</html>
