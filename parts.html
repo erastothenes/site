@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Eras' Page</title>
+	<style>
+		body,html {
+			margin: 0px;
+			padding: 0px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id = "cnv"></canvas>
+	<script>
+		var cv = document.getElementById("cnv");
+		var ctx = cv.getContext('2d');
+		
+		window.onload = function()
+		{
+			cv.width = window.innerWidth;
+			cv.height = window.innerHeight;
+			ctx.fillStyle="black";
+			ctx.fillRect(0,0,cv.width,cv.height);
+			var particles = {};
+			var particleIndex = 0;
+			var particleNum = 100;
+			
+			
+			function Particle()
+			{
+				this.x = cv.width / 2;
+				this.y = cv.height / 2;
+				this.vx = Math.random() * 10 -5;
+				this.vy = Math.random() * 10 -5;
+				particleIndex++;
+				particles[particleIndex] = this;
+				this.id = particleIndex;
+				this.life = 0;
+				this.max_life=200;
+			}
+			
+			Particle.prototype.draw = function()
+			{
+				this.x += this.vx;
+				this.y += this.vy;
+				this.life++;
+				if (this.life == this.max_life)
+				{
+					delete particles[this.id];
+				}
+				ctx.fillStyle = getRndColor();
+				ctx.fillRect(this.x,this.y,25,25);
+			}
+			
+			function getRndColor() {
+				var r = 255*Math.random()|0,
+					g = 255*Math.random()|0,
+					b = 255*Math.random()|0;
+				return 'rgb(' + r + ',' + g + ',' + b + ')';
+			}
+			
+			
+			setInterval(function() {
+			for (var i = 0; i < particleNum; i++)
+			{
+				new Particle();
+			}}, 300);
+			
+			
+				setInterval(function() { 
+					ctx.fillStyle="black";
+					ctx.fillRect(0,0,cv.width,cv.height);
+					for (var i in particles)
+					{
+						particles[i].draw();
+					}
+				},30);
+		}
+	</script>
