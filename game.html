@@ -17,6 +17,9 @@
         var mouseX = 0;
         var mouseY = 0;
         var rect = cv.getBoundingClientRect();
+        var score = 0;
+        var bestscore = 0;
+        var player = {};
 		
 		window.onload = function()
 		{
@@ -26,7 +29,23 @@
 			ctx.fillRect(0,0,cv.width,cv.height);
 			var centerX = cv.width /2 - 45;
 			var centerY = cv.height / 2 - 90;
+            player = new Player();
+           
             
+            function Player()
+            {
+                 this.x = mouseX;
+                 this.y = mouseY;
+                 this.radius = 10;
+            }
+            
+            Player.prototype.draw = function() {
+                
+                ctx.beginPath();
+                ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+                ctx.fill();
+                ctx.closePath();
+            }
 			
 			var particles = {};
 			var particleIndex = 0;
@@ -77,30 +96,32 @@
 					for (var i = 0; i < particleNum; i++)
 					{
 						new Particle(centerX,centerY,Math.random() * 10 -5,Math.random() * 10 - 5,getRndColor(),50);
-						new Particle(centerX-200,centerY-200,Math.random()*10 -5,Math.random() * 10 -5,"red",200);
-						new Particle(centerX+200,centerY+200,Math.random()*10 -5,Math.random() * 10 -5,"#996600",200);
-						new Particle(centerX-200,centerY+200,Math.random()*10-5,Math.random() * 10 -5,"teal",200);
-						new Particle(centerX+200,centerY-208,Math.random()*10-5,Math.random() * 10 -5,"green",200);
-						new Particle(centerX-500,centerY,Math.random()*10-5,Math.random() * 10-5,"blue",200);
-						new Particle(centerX+500,centerY,Math.random()*10-5,Math.random() * 10-5,"purple",200);
 					}
 					
 					ctx.globalCompositeOperation = "source-over";
 					ctx.fillStyle="rgba(0,0,0,0.2)";
 					ctx.fillRect(0,0,cv.width,cv.height);
                     ctx.fillStyle="rgba(255,0,0,0.4)";
-                    ctx.beginPath();
-                    ctx.arc(mouseX,mouseY,10,0,Math.PI*2,false);
-                    ctx.fill();
-                    ctx.closePath();
-					ctx.globalCompositeOperation = "lighter";
+                    player.draw();
 					for (var i in particles)
 					{
 						particles[i].draw();
 					}
+                    ctx.fillStyle = "white";
+                    ctx.font = "30px Arial";
+                    ctx.fillText("Size: "+score+" | Best: "+bestscore,50,900);
 				},30);
-			
-			
+            
+            setInterval(function() {
+                player.x=mouseX;
+                player.y=mouseY;
+                if (player.x > 100)
+                       {
+                           score++;
+                           player.radius++;
+                       }
+                
+            },10);
 				
 		}
 	</script>
