@@ -22,11 +22,12 @@
 				cv.style.backgroundColor="#000000";
 				
 				ctx.strokeStyle="#55FF00";
-				ctx.lineWidth=100;
+				
 				
 				setInterval(function(){
 					for (var i = 0; i < 20; i++)
 					{
+						ctx.lineWidth=Math.random()*100;
 						ctx.strokeRect(0,0,fibn(i),fibn(i));
 						ctx.strokeStyle=getRndColor();
 						
