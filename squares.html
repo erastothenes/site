@@ -27,8 +27,9 @@
 				setInterval(function(){
 					for (var i = 0; i < 20; i++)
 					{
-						ctx.lineWidth=Math.random()*100;
+						
 						ctx.strokeRect(0,0,fibn(i),fibn(i));
+						ctx.lineWidth=Math.random()*100;
 						ctx.strokeStyle=getRndColor();
 						
 					}
